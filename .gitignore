@@ -1,0 +1,9 @@
+*
+!README
+!Makefile
+!LICENSE
+!/**/
+!*.*
+*.o
+*.out
+*.a
