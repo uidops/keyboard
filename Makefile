@@ -31,7 +31,7 @@
 CC=clang
 
 CFLAGS=-O3
-CFLAGS=-march=native
+CFLAGS+=-march=native
 CFLAGS+=-flto=thin
 CFLAGS+=-Wall
 CFLAGS+=-Wextra
