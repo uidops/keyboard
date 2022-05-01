@@ -36,4 +36,7 @@
 int		 get_led(char *);
 int		 set_led(int, char *);
 
+int		 get_numlock(char *);
+int		 set_numlock(int, char *);
+
 #endif

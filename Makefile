@@ -40,13 +40,16 @@ LIBS=-lX11
 
 RM=rm
 
-all: keyboard_backlight
+all: keyboard_backlight keyboard_numlock
 
 keyboard_backlight: compile_lib
 	$(CC) $(CFLAGS) -I. keyboard_backlight.c libkeyboard.o $(LIBS) -o keyboard_backlight
+
+keyboard_numlock: compile_lib
+	$(CC) $(CFLAGS) -I. keyboard_numlock.c libkeyboard.o $(LIBS) -o keyboard_numlock
 
 compile_lib:
 	$(CC) -c $(CFLAGS) -I. lib.c -o libkeyboard.o
 
 clean:
-	$(RM) -f keyboard_backlight *.o
+	$(RM) -f keyboard_backlight keyboard_numlock *.o

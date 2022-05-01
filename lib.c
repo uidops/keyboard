@@ -34,8 +34,42 @@
 #include <X11/XKBlib.h>
 #include <err.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "lib.h"
+
+unsigned int
+get_mask(char *display_name, char *name)
+{
+	Display *dpy;
+	XkbDescPtr xkb;
+	unsigned int n;
+	
+	dpy = XOpenDisplay(display_name);
+	if (dpy == NULL) {
+		if (display_name == NULL)
+			display_name = getenv("DISPLAY");
+		warnx("(%s): Connection refused", display_name);
+		return 0;
+	}
+
+	xkb = XkbGetKeyboard(dpy, XkbAllComponentsMask, XkbUseCoreKbd);
+	if (xkb == NULL)
+		return 0;
+
+	for (n = 0; n < XkbNumVirtualMods; n++) {
+		char *x = XGetAtomName(xkb->dpy, xkb->names->vmods[n]);
+		if (x != NULL && !strncmp(name, x, strlen(name))) {
+			unsigned int mask = 0;
+			XkbVirtualModsToReal(xkb, 1 << n, &mask);
+			XCloseDisplay(dpy);
+			return mask;
+		}
+	}
+
+	XCloseDisplay(dpy);
+	return 0;
+}
 
 int
 get_led(char *display_name)
@@ -78,4 +112,56 @@ set_led(int status, char *display_name) {
 	XCloseDisplay(dpy);
 
 	return 0;
+}
+
+
+
+#include <stdio.h>
+#include <unistd.h>
+
+int
+get_numlock(char *display_name)
+{
+	Display *dpy;
+	XkbStateRec xkbstat;
+
+	dpy = XOpenDisplay(display_name);
+	if (dpy == NULL) {
+		if (display_name == NULL)
+			display_name = getenv("DISPLAY");
+		warnx("(%s) Connection refused", display_name);
+		return -1;
+	}
+
+	unsigned int mask = get_mask(display_name, "NumLock");
+	if (!mask) return -1;
+
+	XkbGetState(dpy, XkbUseCoreKbd, &xkbstat);
+	XCloseDisplay(dpy);
+
+	return (xkbstat.locked_mods & mask) ? 1 : 0;
+}
+
+int
+set_numlock(int status, char *display_name)
+{
+	Display *dpy;
+	unsigned int lm;
+
+	dpy = XOpenDisplay(display_name);
+	if (dpy == NULL) {
+		if (display_name == NULL)
+			display_name = getenv("DISPLAY");
+		warnx("(%s) Connection refused", display_name);
+		return -1;
+	}
+
+	unsigned int mask = get_mask(display_name, "NumLock");
+	if (!mask) return -1;
+	lm = XkbLockModifiers(dpy, XkbUseCoreKbd, mask, status ? mask : 0);
+
+	XFlush(dpy);
+	XCloseDisplay(dpy);
+
+	return lm ? 0 : -1;
 }
