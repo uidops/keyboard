@@ -28,7 +28,8 @@
 
 CC=clang
 
-CFLAGS=-O2
+CFLAGS=-O3
+CFLAGS=-march=native
 CFLAGS+=-flto=thin
 CFLAGS+=-Wall
 CFLAGS+=-Wextra
@@ -39,8 +40,11 @@ RM=rm
 
 all: keyboard_backlight
 
-keyboard_backlight:
-	$(CC) $(CFLAGS) keyboard_backlight.c lib.c $(LIBS) -o keyboard_backlight
+keyboard_backlight: compile_lib
+	$(CC) $(CFLAGS) keyboard_backlight.c libkeyboard.o $(LIBS) -o keyboard_backlight
+
+compile_lib:
+	$(CC) -c $(CFLAGS) lib.c -o libkeyboard.o
 
 clean:
-	$(RM) keyboard_backlight
+	$(RM) -f keyboard_backlight *.o

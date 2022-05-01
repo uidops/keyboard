@@ -33,13 +33,13 @@
 
 #include "lib.h"
 
-void		 help(int __exit_status);
+void		 help(int);
 
 int
 main(int argc, char **argv)
 {
-	int		 status;
-	int		 aflag=0, bflag=0;
+	int status;
+	int aflag=0, bflag=0;
 
 	if (argc >= 3)
 		help(EXIT_FAILURE);
@@ -90,16 +90,16 @@ main(int argc, char **argv)
 void
 help(int exit_status)
 {
-	fputs("KEYBOARD BACKLIGHT CONTROL\n\n", stdout);
-	fputs("values:\n", stdout);
-	fputs("   get       Get the keyboard backlight status. (default)\n", stdout);
-	fputs("              it'll be printed in stdout if selected or in default mode\n", stdout);
-	fputs("              otherwise in stderr\n", stdout);
-	fputs("   on        Turn on the keyboard backlight.\n", stdout);
-	fputs("   off       Turn off the keyboard backlight.\n", stdout);
-	fputs("   toggle    Toggle the keyboard backlight.\n\n", stdout);
-	fputs("   help      Help.\n\n", stdout);
-	fputs("Github: https://github.com/siruidops/keyboard\n", stdout);
+	puts("KEYBOARD BACKLIGHT CONTROL\n");
+	puts("values:");
+	puts("   get       Get the keyboard backlight status. (default)");
+	puts("              it'll be printed in stdout if selected or in default mode");
+	puts("              otherwise in stderr");
+	puts("   on        Turn on the keyboard backlight.");
+	puts("   off       Turn off the keyboard backlight.");
+	puts("   toggle    Toggle the keyboard backlight.\n");
+	puts("   help      Help.\n");
+	puts("Source code: https://github.com/uidops/keyboard");
 
 	exit(exit_status);
 }

@@ -30,7 +30,7 @@
 #ifndef _LIB_H
 #define _LIB_H
 
-int		 get_led(char *__display_name);
-int		 set_led(int __status, char *__display_name);
+int		 get_led(char *);
+int		 set_led(int, char *);
 
 #endif

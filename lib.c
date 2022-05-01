@@ -37,12 +37,12 @@
 int
 get_led(char *display_name)
 {
-	Display		*dpy; 
+	Display *dpy; 
 	XKeyboardState x;
 
 	dpy = XOpenDisplay(display_name);
 	if (dpy == NULL) {
-		if (!display_name)
+		if (display_name == NULL)
 			display_name = getenv("DISPLAY");
 		warnx("(%s): Connection refused", display_name);
 		return -1;
@@ -51,16 +51,17 @@ get_led(char *display_name)
 	XGetKeyboardControl(dpy, &x);
 	XCloseDisplay(dpy);
 
-	return x.led_mask & 4 ? 1 : 0; 
+	return (x.led_mask&4) ? 1 : 0; 
 }
 
-int set_led(int status, char *display_name) {
-	Display		*dpy;
+int
+set_led(int status, char *display_name) {
+	Display	*dpy;
 	XKeyboardControl values;
 
 	dpy	= XOpenDisplay(display_name);
 	if (dpy == NULL) {
-		if (!display_name)
+		if (display_name== NULL)
 			display_name = getenv("DISPLAY");
 		warnx("(%s): Connection refused", display_name);
 		return -1;
@@ -69,9 +70,9 @@ int set_led(int status, char *display_name) {
 	values.led_mode = status ? LedModeOn : LedModeOff; 
 	values.led = 3;
 
-	XChangeKeyboardControl(dpy, KBLed | KBLedMode, &values);
+	XChangeKeyboardControl(dpy, KBLed|KBLedMode, &values);
 	XFlush(dpy);
 	XCloseDisplay(dpy);
 
-	return 1;
+	return 0;
 }
