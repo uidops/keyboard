@@ -114,11 +114,6 @@ set_led(int status, char *display_name) {
 	return 0;
 }
 
-
-
-#include <stdio.h>
-#include <unistd.h>
-
 int
 get_numlock(char *display_name)
 {
