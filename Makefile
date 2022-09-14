@@ -28,17 +28,12 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-CC=clang
+CC ?= cc
+RM ?= rm
 
-CFLAGS=-O3
-CFLAGS+=-march=native
-CFLAGS+=-flto=thin
-CFLAGS+=-Wall
-CFLAGS+=-Wextra
+CFLAGS ?= -O3 -march=native -pipe -Wall -Wextra
 
-LIBS=-lX11
-
-RM=rm
+LIBS != pkg-config --cflags --libs x11
 
 all: keyboard_backlight keyboard_numlock
 
